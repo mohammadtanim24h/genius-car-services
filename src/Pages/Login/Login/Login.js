@@ -1,17 +1,37 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import auth from "../../../firebase.init";
 
 const Login = () => {
     const emailRef = useRef("");
     const passwordRef = useRef("");
 
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useSignInWithEmailAndPassword(auth);
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
-        console.log(email, password);
+        signInWithEmailAndPassword(email, password);
     };
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
+
+    if (error) {
+        console.log(error);
+    }
     return (
         <div className="container w-50 mx-auto border border-2 rounded px-4 py-2 my-3">
             <h2 className="text-primary text-center">Login</h2>
@@ -40,7 +60,15 @@ const Login = () => {
                     Login
                 </Button>
             </Form>
-            <p className="mt-4">New to Genius Car Services? <Link className="text-primary text-decoration-none" to='/register'>Register</Link></p>
+            <p className="mt-4">
+                New to Genius Car Services?{" "}
+                <Link
+                    className="text-primary text-decoration-none"
+                    to="/register"
+                >
+                    Register
+                </Link>
+            </p>
         </div>
     );
 };
