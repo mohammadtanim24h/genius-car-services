@@ -1,9 +1,16 @@
+import { async } from "@firebase/util";
 import React, { useEffect, useRef } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+    useSendPasswordResetEmail,
+    useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
+import Loading from "../../Shared/Loading/Loading";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
     const emailRef = useRef("");
@@ -12,12 +19,8 @@ const Login = () => {
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
 
-    const [
-        signInWithEmailAndPassword,
-        user,
-        loading,
-        error,
-      ] = useSignInWithEmailAndPassword(auth);
+    const [signInWithEmailAndPassword, user, loading, error] =
+        useSignInWithEmailAndPassword(auth);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -25,17 +28,38 @@ const Login = () => {
         const password = passwordRef.current.value;
         signInWithEmailAndPassword(email, password);
     };
-       
+
     useEffect(() => {
         if (user) {
             navigate(from, { replace: true });
+            console.log(user);
         }
     }, [user]);
 
     let errorElement;
     if (error) {
-        errorElement = <p className="text-danger text-center">{error.message}</p>
+        errorElement = (
+            <p className="text-danger text-center">{error.message}</p>
+        );
     }
+
+    // password reset hook
+    const [sendPasswordResetEmail] = useSendPasswordResetEmail(auth);
+
+    const resetPassword = async () => {
+        const email = emailRef.current.value;
+        if(!email){
+            toast('Please enter an email');
+            return;
+        }
+        await sendPasswordResetEmail(email);
+        toast('Password Reset Email Sent');
+    };
+
+    if (loading) {
+        return <Loading></Loading>;
+    }
+
     return (
         <div className="container w-50 mx-auto border border-2 rounded px-4 py-2 my-3">
             <h2 className="text-primary text-center">Login</h2>
@@ -61,7 +85,11 @@ const Login = () => {
                     />
                 </Form.Group>
 
-                <Button className="w-50 mx-auto d-block" variant="primary" type="submit">
+                <Button
+                    className="w-50 mx-auto d-block"
+                    variant="primary"
+                    type="submit"
+                >
                     Login
                 </Button>
             </Form>
@@ -74,7 +102,21 @@ const Login = () => {
                     Register
                 </Link>
             </p>
+
+            <p>
+                Forgot Password?{" "}
+                <span
+                    style={{ cursor: "pointer" }}
+                    className="text-primary"
+                    onClick={resetPassword}
+                >
+                    Reset Password
+                </span>
+            </p>
             <SocialLogin></SocialLogin>
+
+            {/* Toast Container */}
+            <ToastContainer></ToastContainer>
         </div>
     );
 };

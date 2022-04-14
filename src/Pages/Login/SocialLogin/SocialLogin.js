@@ -6,6 +6,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import googleLogo from "../../../images/google.png";
+import Loading from "../../Shared/Loading/Loading";
 
 const SocialLogin = () => {
     const navigate = useNavigate();
@@ -27,9 +28,8 @@ const SocialLogin = () => {
             </div>
         );
     }
-    let loadingElement;
-    if (loading) {
-        loadingElement = <p className="text-center">Loading...</p>;
+    if (loading || loadingGit) {
+        return <Loading></Loading>;
     }
     return (
         <div>
@@ -50,7 +50,6 @@ const SocialLogin = () => {
                     }}
                 ></div>
             </div>
-            {loadingElement}
             {errorElement}
             <div className="text-center mb-3">
                 <button
