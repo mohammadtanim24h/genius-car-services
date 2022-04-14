@@ -57,7 +57,7 @@ const Register = () => {
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
+                <Button className="w-50 mx-auto d-block" variant="primary" type="submit">
                     Register
                 </Button>
             </Form>

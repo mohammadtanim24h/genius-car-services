@@ -25,20 +25,21 @@ const Login = () => {
         const password = passwordRef.current.value;
         signInWithEmailAndPassword(email, password);
     };
-
-    
+       
     useEffect(() => {
         if (user) {
             navigate(from, { replace: true });
         }
     }, [user]);
 
+    let errorElement;
     if (error) {
-        console.log(error);
+        errorElement = <p className="text-danger text-center">{error.message}</p>
     }
     return (
         <div className="container w-50 mx-auto border border-2 rounded px-4 py-2 my-3">
             <h2 className="text-primary text-center">Login</h2>
+            {errorElement}
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
@@ -60,7 +61,7 @@ const Login = () => {
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
+                <Button className="w-50 mx-auto d-block" variant="primary" type="submit">
                     Login
                 </Button>
             </Form>
