@@ -9,15 +9,6 @@ import { signOut } from "firebase/auth";
 
 const Header = () => {
     const [user] = useAuthState(auth);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
-
-    useEffect(() => {
-        if (user) {
-            navigate(from, { replace: true });
-        }
-    }, [user]);
 
     const handleSignOut = () => {
         signOut(auth);
