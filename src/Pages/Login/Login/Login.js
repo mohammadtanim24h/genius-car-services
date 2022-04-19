@@ -11,6 +11,8 @@ import Loading from "../../Shared/Loading/Loading";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PageTitle from "../../Shared/PageTitle/PageTitle";
+import titleHelmet from '../../../titleHelmet';
 
 const Login = () => {
     const emailRef = useRef("");
@@ -56,12 +58,19 @@ const Login = () => {
         toast('Password Reset Email Sent');
     };
 
+    // a way to set title dynamically besides react helmet async
+    // useEffect(() => {
+    //     document.title = "Login Page"
+    // }, [])
+
     if (loading) {
         return <Loading></Loading>;
     }
 
     return (
         <div className="container w-50 mx-auto border border-2 rounded px-4 py-2 my-3">
+            <PageTitle title="Login"></PageTitle>
+            {/* {titleHelmet("Login")} */}
             <h2 className="text-primary text-center">Login</h2>
             {errorElement}
             <Form onSubmit={handleSubmit}>
