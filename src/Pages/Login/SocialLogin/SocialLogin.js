@@ -3,19 +3,21 @@ import {
     useSignInWithGithub,
     useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import googleLogo from "../../../images/google.png";
 import Loading from "../../Shared/Loading/Loading";
 
 const SocialLogin = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
     const [signInWithGithub, userGit, loadingGit, errorGit] =
         useSignInWithGithub(auth);
     useEffect(() => {
         if (user || userGit) {
-            navigate("/");
+            navigate(from, { replace: true });
         }
     }, [user, userGit]);
     let errorElement;
