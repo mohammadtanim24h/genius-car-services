@@ -11,16 +11,15 @@ import Loading from "../../Shared/Loading/Loading";
 const RequireAuth = ({ children }) => {
     const [sendEmailVerification] = useSendEmailVerification(auth);
     const [user, loading] = useAuthState(auth);
-    console.log(user);
     const location = useLocation();
-    console.log(user);
     if (loading) {
         return <Loading></Loading>; //login e gele to fire ashe na kintu loading component dekhanor pore abar render hoy kibhabe? login onno ekta route eijonno? Yes
     }
     if (!user) {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
-    if (!user.emailVerified) {
+    // console.log(user.providerData[0].providerId);
+    if (user?.providerData[0]?.providerId === "password" && !user.emailVerified) {
         return (
             <div>
                 <h2 className="text-danger text-center">
