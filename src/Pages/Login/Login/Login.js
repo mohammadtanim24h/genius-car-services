@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../../Shared/PageTitle/PageTitle";
 import titleHelmet from '../../../titleHelmet';
+import axios from "axios";
 
 const Login = () => {
     const emailRef = useRef("");
@@ -24,17 +25,20 @@ const Login = () => {
     const [signInWithEmailAndPassword, user, loading, error] =
         useSignInWithEmailAndPassword(auth);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
-        signInWithEmailAndPassword(email, password);
+        await signInWithEmailAndPassword(email, password);
+        const {data} = await axios.post("http://localhost:5000/login", {email})
+        console.log(data);
+        localStorage.setItem('accessToken', data.accessToken);
+        navigate(from, { replace: true });
     };
 
     useEffect(() => {
         if (user) {
-            navigate(from, { replace: true });
-            console.log(user);
+            // navigate(from, { replace: true });
         }
     }, [user]);
 
