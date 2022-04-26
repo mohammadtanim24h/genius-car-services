@@ -8,6 +8,7 @@ import {
 } from "react-firebase-hooks/auth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import Loading from "../../Shared/Loading/Loading";
+import useToken from "../../../hooks/useToken";
 
 const Register = () => {
     // conditional rendering of checkbox and register button
@@ -21,6 +22,9 @@ const Register = () => {
 
     //update profile funtion
     const [updateProfile, updating] = useUpdateProfile(auth);
+    
+    // token
+    const [token] = useToken(user);
 
     // register
     const handleRegister = async (e) => {
@@ -30,16 +34,16 @@ const Register = () => {
         const password = e.target.password.value;
         await createUserWithEmailAndPassword(email, password);
         await updateProfile({ displayName: name });
-        navigate("/");
+        
     };
 
     const navigate = useNavigate();
     // navigate when user is created successfully
     useEffect(() => {
-        if (user) {
-            console.log(user);
+        if (token) {
+            navigate("/");
         }
-    }, [user]);
+    }, [token]);
 
     if (error) {
         console.log(error);

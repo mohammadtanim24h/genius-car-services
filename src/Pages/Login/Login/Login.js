@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../../Shared/PageTitle/PageTitle";
 import titleHelmet from '../../../titleHelmet';
 import axios from "axios";
+import useToken from "../../../hooks/useToken";
 
 const Login = () => {
     const emailRef = useRef("");
@@ -25,22 +26,24 @@ const Login = () => {
     const [signInWithEmailAndPassword, user, loading, error] =
         useSignInWithEmailAndPassword(auth);
 
+    // token
+    const [token] = useToken(user);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
-        await signInWithEmailAndPassword(email, password);
-        const {data} = await axios.post("https://tranquil-tor-90442.herokuapp.com/login", {email})
-        console.log(data);
-        localStorage.setItem('accessToken', data.accessToken);
-        navigate(from, { replace: true });
+        await signInWithEmailAndPassword(email, password); // jodi sign in korte problem hoito tahole ki hoito? next line e ki jaito?
+        // const {data} = await axios.post("https://tranquil-tor-90442.herokuapp.com/login", {email})
+        // console.log(data);
+        // localStorage.setItem('accessToken', data.accessToken);
     };
 
     useEffect(() => {
-        if (user) {
-            // navigate(from, { replace: true });
+        if (token) {
+            navigate(from, { replace: true });
         }
-    }, [user]);
+    }, [token]);
 
     let errorElement;
     if (error) {

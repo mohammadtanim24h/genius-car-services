@@ -5,6 +5,7 @@ import {
 } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
+import useToken from "../../../hooks/useToken";
 import googleLogo from "../../../images/google.png";
 import Loading from "../../Shared/Loading/Loading";
 
@@ -15,8 +16,12 @@ const SocialLogin = () => {
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
     const [signInWithGithub, userGit, loadingGit, errorGit] =
         useSignInWithGithub(auth);
+    
+    // token
+    const [token] = useToken(user || userGit);
+    
     useEffect(() => {
-        if (user || userGit) {
+        if (token) {
             navigate(from, { replace: true });
         }
     }, [user, userGit]);
