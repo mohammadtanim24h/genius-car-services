@@ -18,15 +18,14 @@ const Checkout = () => {
     //     address: 'Tajmahal Road, Mohammadpur',
     //     phone: '01894322343'
     // })
-    // const handleAddressChange = (e) => {
-    //     console.log(e.target.value);
-    //     const {address, ...rest} = user;
-    //     const newAddress = e.target.value;
-    //     const newUser = {address: newAddress, ...rest};
-    //     setUser(newUser);
-
-        // console.log(address, rest);
-    // }
+    const handleAddressChange = (e) => {
+        console.log(e.target.value);
+        const {address, ...rest} = user;
+        console.log(address, rest);
+        const newAddress = e.target.value;
+        const newUser = {address: newAddress, ...rest};
+        // setUser(newUser);
+    }
 
     const handleBooking = (e) => {
         e.preventDefault();
