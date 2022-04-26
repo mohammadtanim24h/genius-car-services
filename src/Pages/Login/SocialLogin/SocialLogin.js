@@ -19,12 +19,12 @@ const SocialLogin = () => {
     
     // token
     const [token] = useToken(user || userGit);
-    
+
     useEffect(() => {
         if (token) {
             navigate(from, { replace: true });
         }
-    }, [user, userGit]);
+    }, [token]);
     let errorElement;
     if (error || errorGit) {
         errorElement = (
