@@ -14,7 +14,7 @@ const Order = () => {
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const { data } = await axiosPrivate.get(`http://localhost:5000/order?email=${email}`);
+                const { data } = await axiosPrivate.get(`https://tranquil-tor-90442.herokuapp.com/order?email=${email}`);
                 setOrders(data);
             }
             catch(error) {
@@ -29,8 +29,14 @@ const Order = () => {
     }, [email]);
     console.log(orders);
     return (
-        <div className="text-center">
-            <h2>Your Orders {orders.length}</h2>
+        <div className="text-center w-75 mx-auto">
+            <h2 className="text-secondary">Your Orders {orders.length}</h2>
+            {
+                orders.map(order => <div className="m-3 p-3 shadow rounded" key={order._id}>
+                    <h4 className="text-secondary">{order.service}</h4>
+                    <p className="lead">Address: {order.address}</p>
+                </div> )
+            }
         </div>
     );
 };
